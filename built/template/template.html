@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{{title}}}</title>
+
+    <link rel="icon" href="../../image/favicon.ico" sizes="48x48">
+    <link rel="icon" href="../../image/favicon.svg" sizes="any" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../../image/apple-touch-icon.png">
+
+    <link rel="stylesheet" type="text/css" href="../../css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../css/system.css">
+    <link rel="stylesheet" type="text/css" href="../../css/story.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<div id="menu" class="flex">
+    <a href="../../index.html" title="Go to Homepage">
+        <img src="../../image/bookmark.png" alt="Logo">
+        <img src="../../image/logo.png" alt="Logo">
+
+    </a>
+</div>
+
+<body>
+
+    <div id="content" class=" container speaker-selection">
+
+        <div class="story-image-container"
+            style="background-image: url('/built/static/image/{{{sanitized_title}}}.jpg');">
+        </div>
+
+
+        <h2 id="storyTitle" class="story-title">{{{title}}}</h2>
+        <div class="speaker-select flex">
+            <div>
+                <label for="existingSpeakers">Current Speaker</label>
+                <select id="existingSpeakers" name="existingSpeakers">
+                    {{#existing_speakers}}
+                    <option value="{{.}}">{{.}}</option>
+                    {{/existing_speakers}}
+                </select>
+            </div>
+            <div>
+                <label for="allSpeakers">Select New Speaker</label>
+                <select id="allSpeakers" name="allSpeakers">
+                    <option value="">Select a new speaker</option>
+                    {{#all_speakers}}
+                    <option value="{{.}}">{{.}}</option>
+                    {{/all_speakers}}
+                </select>
+            </div>
+
+            <button id="generateButton" disabled>Generate Audio</button>
+        </div>
+        <div id="generationStatus"></div>
+
+        <div id="audioChunks">
+            {{#chunks}}
+            <div class="chunk" data-index="{{index}}">
+                <button class="play-button"><i class="fas fa-play"></i></button>
+                <p>{{{text}}}</p>
+                <audio src="{{{audio}}}" style="display: none;"></audio>
+            </div>
+            {{/chunks}}
+        </div>
+
+        <div id="speakerData" data-existing-speakers='{{{existing_speakers_json}}}'
+            data-all-speakers='{{{all_speakers_json}}}'>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Pass necessary data to JavaScript
+        const storyData = {
+            originalTitle: "{{{title}}}",
+            sanitizedTitle: "{{sanitized_title}}",
+            language: "{{language}}"
+        };
+        // Function to replace underscores with spaces
+        function formatTitle(title) {
+            return title.replace(/_/g, ' ');
+        }
+
+        // Apply the formatting when the document is ready
+        $(document).ready(function () {
+            const formattedTitle = formatTitle(storyData.originalTitle);
+            document.title = formattedTitle;
+            $('#storyTitle').text(formattedTitle);
+        });
+    </script>
+
+    <script src="../../js/story.js"></script>
+</body>
+
+</html>
